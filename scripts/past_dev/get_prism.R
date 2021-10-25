@@ -24,12 +24,12 @@ Pre_ann_PRW <- projectRaster(US_ann_pre, NED_PRW) %>%
 
 m<-quantile(Pre_ann_PRW, probs = c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9,1))
 
-hist(Pre_ann_PRW, breaks =m, col=rev(heat.colors(9)), main="hist of quantile breaks annual precip", xlab="precip (mm)")
+hist(Pre_ann_PRW, breaks =m, col=rev(heat.colors(10)), main="hist of quantile breaks annual precip", xlab="precip (mm)")
 
 m<- matrix(c(m[1:length(m)-1], m[2:length(m)], 1:10),ncol=3)
 
 Cli_PRW<- reclassify(Pre_ann_PRW,m,include.lowest=T, right=T)#? reclassify
-
+plot(Cli_PRW)
 #find the mean and median centroid 
 Raster_centroid<-function(df){
   values<-unique(df)
@@ -47,8 +47,9 @@ Raster_centroid<-function(df){
 writeRaster(Cli_PRW,"processed_data/Cli_PRW")
 writeRaster(Pre_ann_PRW,"processed_data/Pre_ann_PRW")
 
-cli_PRW <- raster("processed_data/Cli_PRW")
+Cli_PRW <- raster("processed_data/Cli_PRW")
 
-Raster_centroid(Cli_PRW)
-
-
+ cli_centroids<-Raster_centroid(Cli_PRW)
+# plot(x=cli_centroids$x,y=cli_centroids$y, add=T)
+# spatial(cli_centroids)=T
+# cli_centroids_P <- SpatialPoints(cli_centroids,CRS)

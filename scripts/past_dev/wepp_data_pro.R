@@ -25,7 +25,7 @@ library(dplyr)
 #install.packages("stringr", dependencies = TRUE)
 library(stringr)
 
-p
+
 #Functions: 
 Numextract <- function(string){
   unlist(regmatches(string,gregexpr("[[:digit:]]+\\.*[[:digit:]]*",string)))
@@ -40,12 +40,13 @@ substrLeft <- function(x, n){
 
 path<-"processed_data/scratch"
 # get files- name files
+
 loss_files<-as.data.frame(list.files(path,pattern = "*.loss",full.names = F))
 #slope_files<-as.data.frame(list.files(path = "slope",pattern = "*.slp",full.names = F))
 wat_files<-as.data.frame(list.files(path,pattern = "*wat.txt",full.names = F))
 
 colnames(loss_files)<-"fullname"
-colnames(slope_files)<-"fullname"
+#colnames(slope_files)<-"fullname"
 colnames(wat_files)<-"fullname"
 str(loss_files)
 
@@ -143,54 +144,15 @@ for(p in 1:NROW(loss_files)){
     year1<-c()
     temp2<-data.frame()
   }
-  #rm(year1,v,n,c,t,year_1)
   
-  #Erosion_WW= h[[1]]$Erosion
-  #Erosion_B=h[[2]]$Erosion
-  #Erosion_F=h[[3]]$Erosion
-  #Counter<-1
-  #for(i in seq(from=4, to=length(c)-3, by=3)){
-  #  Counter<-Counter+1
-  #  Erosion_WW <-Erosion_WW+h[[i]]$Erosion  
-  #  Erosion_B <-Erosion_B+h[[i+1]]$Erosion  
-  #  Erosion_F <-Erosion_F+h[[i+2]]$Erosion  
-  #   
-  #    }
-  
-  #Erosion_WW <-Erosion_WW/Counter
-  #Erosion_B <-Erosion_B/Counter
-  #Erosion_F <-Erosion_F/Counter
-  #Erosion_Mean<-(Erosion_WW+Erosion_B+Erosion_F)/3  
-  
-  # str(h)
-  # g<-1+get('l')
-  # 
-  #if (length(c)<31){
-  #  y31<-as.data.frame(h[[length(c)]])  #this could be fixed with erosion mean??
-  #}else{
-  #  y31<-as.data.frame(h[[31]])
-  #}
   y31=as.data.frame(h[[1]])
   colnames(y31)<-c("distance_m", "erosion_kgm2","OFE")
-  #y31$erosion_kgm2<-Erosion_Mean
-  #plot(Erosion_Mean,ylim=c(-3,10))
-  #points(Erosion_B, col = "red")
-  #points(Erosion_F,col="blue")
-  #points(Erosion_WW, col="green")
-  #points(y31$erosion_kgm2,col="purple")
-  
-  #y31$erosion_WW<-Erosion_WW
-  #y31$erosion_B<-Erosion_B
-  #y31$erosion_F<-Erosion_F
-  
+
   
   y31_mean <- y31 %>% group_by(OFE)%>% summarise_at(vars(erosion_kgm2,distance_m),funs(mean,max))#erosion_WW,erosion_B,erosion_F
   if(o==1){
     y31_mean<-y31_mean[1:(NROW(y31_mean)-1),]
   }
-  #plot(y31_mean$distance_m_max,y31_mean$erosion_kgm2_mean)
-  #points(y31$distance_m ,y31$erosion_kgm2)
-  #points(y31$distance_m ,Erosion_Mean, col="green")
   
   #_______________Get_Runoff_and_lateral_flow_of_each_point_(OFE+1)_____________________________________________________________________#
   wat_mean<- (wat %>% group_by(OFE)%>% summarise_at(vars(RM,Ep,Es,Dp,Q,UpStrmQ,latqcc),sum)/30)
@@ -233,7 +195,7 @@ for(p in 1:NROW(loss_files)){
   # #_______________output _____________________________________________________________________________________________________#
   path_out<- paste(paste("processed_data/profile",loss_files$ID[p],sep='/'),".txt",sep="")
   # path_out_mag<- paste(paste(getwd(),"mag",slope_files$number[p],sep='/'),".txt",sep="")
-  ?paste
+  #?paste
   f <- file(path_out, open="wb")
   write.table((y31_mean),file=f,quote=FALSE, row.names = FALSE, col.names = T, eol="\n",fileEncoding = "UTF-8")
   # write.table((magnitude),file=f,quote=FALSE, row.names = FALSE, col.names = T, eol="\n",fileEncoding = "UTF-8")
@@ -241,6 +203,7 @@ for(p in 1:NROW(loss_files)){
   close(f)
   
 }
+
 
 
 

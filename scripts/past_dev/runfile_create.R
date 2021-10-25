@@ -1,3 +1,5 @@
+library(stringr)
+
 
 a <- list("m","y","1","1","y")
 c <- list("1","n")
@@ -6,7 +8,10 @@ g <- list("n","n","n","n","n","n","n","n","n")
 i <- list(0,30,0)
 
 
-j=4
+inputs <- as.data.table(inputs)[ofe == 3]
+
+
+j=40
 for (j in 1:length(inputs$ofe)) {
   file_name<-paste0(inputs$cli[j],"_",str_extract(inputs$soil_depth[j], "^.{1}"),"_",
                     strsplit(as.character(inputs$slope[j]),split="[.]")[[1]][1],
@@ -58,8 +63,8 @@ m1 <- r2[1:j1]
 m2 <- r2[(j1+1):j2]
 m3 <- r2[(j2+1):j3]
 m4 <- r2[(j3+1):j4]
-m5 <- r2[grep(pattern = "_300_", x=r2)] 
-m6 <- r2[grep(pattern = "_wbf_mt1", x=r2)]
+m5 <- r2[grep(pattern = c("/8_s"), x=r2)] 
+m6 <- r2[grep(pattern = "/7_s", x=r2)]
 
 o <- unlist(m)
 o1 <- c(l,m1,n)
