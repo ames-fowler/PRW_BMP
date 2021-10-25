@@ -34,3 +34,10 @@ vignettes/*.pdf
 
 # Shiny token, see https://shiny.rstudio.com/articles/shinyapps.html
 rsconnect/
+
+# dir with data (too big) 
+/RAW
+/processed_data
+/validation
+/weppcloud_thorn
+/EXTRACTIONS
